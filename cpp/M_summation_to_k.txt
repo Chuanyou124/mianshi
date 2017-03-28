@@ -1,0 +1,58 @@
+Q) You have an array of positive integers with no duplicates (say A). You need to find all sets of size 2 such that they add up to a given target 'K'
+
+Ex : {600, 5 , 1 , 2, 4, 3} (A)
+K = 5
+
+{2,3}
+{1,4}
+
+ans = 2
+
+int numSets(const vector<int>& array, int K)
+{
+    unordered_set<int> sa;
+    for (int i = 0; i < array.size(); ++i)
+    {
+        sa.insert(array[i]);
+    }
+    int num = 0;
+    for (int i = 0; i < array.size(); ++i)
+    {
+        if (sa.find(K - array[i]) != sa.end() && 2*array[i] != K)
+        {
+            ++num;
+        }
+    }
+    return num/2;
+}
+ K = 10
+ 
+ Q) You have an array of positive integers with no duplicates (say A). You need to find all sets of size 'M' such that they add up to a given target 'K'
+
+Ex : {600, 5 , 1 , 2, 4, 3} (A)
+K = 6
+M = 3
+
+{1, 2,3}
+
+ans = 1
+
+f(A[:], K, M) = f(A[1:], K-A[0], M-1) + f(A[2:], K-A[1], M-1) + f(A[3:], K-A[2], M-1 +...
+
+int numSets(const vector<int>& array, int K, int M, int idx)
+{
+    if (idx >= array.size() || M < 1 || K <= 0)
+    {
+        return 0;
+    }
+    if (M == 1)
+    {
+        return exist(array, idx, K) ? 1:0;
+    }
+    int num = 0;
+    for (int i = 0; i < array.size(); ++i)
+    {
+        num += numSets(array, K-array[i], M-1, i+1);
+    }
+    return num;
+}

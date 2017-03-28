@@ -1,0 +1,45 @@
+// THIS IS A WRONG ALGORITHM but correct code, the algorithm
+// is in http://stackoverflow.com/questions/1506078/fast-permutation-number-permutation-mapping-algorithms
+// for instance: 123
+the 4th (k = 3) permutation should be 231, but according to the
+algorithm, it will be 312
+
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        --k;
+        int base = 1;
+        int pos[n];
+        for (int i = n - 1; i >= 0; --i)
+        {
+            pos[i] = k % base;
+            k /= base;
+            ++base;
+        }
+        int seq[n];
+        for (int j = 0; j < n; ++j)
+        {
+            seq[j] = 0;
+        }
+        string result = "";
+        for (int i = 0; i < n; ++i)
+        {
+            int countPos = pos[i] + 1;
+            int idx = -1;
+            while (countPos > 0)
+            {
+                idx++;
+                if (seq[idx] == 0)
+                {
+                    --countPos;
+                }
+            }
+            seq[idx] = i + 1;
+        }
+        for (int i = 0; i < n; ++i)
+        {
+            result = result+to_string(seq[i]);
+        }
+        return result;
+    }
+};

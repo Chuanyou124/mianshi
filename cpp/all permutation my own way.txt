@@ -1,0 +1,35 @@
+// Type your C++ code and click the "Run Code" button!
+// Your code output will be shown on the left.
+// Click on the "Show input" button to enter input data to be read (from stdin).
+
+#include <iostream>
+using namespace std;
+
+void permutation(const string& s, bool chosen[], string& aSeq)
+{
+    if (aSeq.length() == s.length())
+    {
+        cout << aSeq << endl;
+        return;
+    }
+    for (int i = 0; i < s.length(); ++i)
+    {
+        if (!chosen[i])
+        {
+            aSeq.push_back(s[i]);
+            chosen[i] = true;
+            permutation(s, chosen, aSeq);
+            chosen[i] = false;
+            aSeq.pop_back();
+        }
+    }
+}
+
+int main() {
+    string s = "1234";
+    bool chosen[s.length()]; //initialize to all false
+    string aSequence = "";
+    permutation(s, chosen, aSequence);
+    
+    return 0;
+}

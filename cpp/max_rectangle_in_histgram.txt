@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int max(int x, int y)
+    {
+        return (x > y ? x:y);
+    }
+    
+    int largestRectangleArea(vector<int> &height) {
+        if (height.size() ==0)
+        {
+            return 0;
+        }
+        height.push_back(-1);
+        vector<pair<int, int> > stack;
+        
+        int maxA = 0;
+        for (int index = 0; index < height.size(); ++index)
+        {
+            if (stack.size() == 0 || stack.back().second <= height[index])
+            {
+                stack.push_back(pair<int, int>(index, height[index]));
+                continue;
+            }
+            while (stack.size() > 0 && stack.back().second > height[index])
+            {
+                int area;
+                if (stack.size() == 1)
+                {
+                    area = stack.back().second * index;
+                }
+                else
+                {
+                    area = stack.back().second * (index - stack[stack.size() - 2].first - 1);
+                }
+                maxA = max(maxA, area);
+                stack.pop_back();
+            }
+            stack.push_back(pair<int, int>(index, height[index]));
+        }
+        return maxA;
+        
+    }
+};

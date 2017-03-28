@@ -1,0 +1,45 @@
+#include <iostream>
+#include <unordered_set>
+using namespace std;
+
+void powerSet(const vector<int>& input, unordered_set<vector<int> >& result)
+{
+    vector<int> empty;
+    result.insert(empty);
+    for (int i = 0; i < input.size(); ++i)
+    {
+        vector<vector<int> > tmp;
+        for (unordered_set<vector<int> >::iterator it = result.begin();
+             it != result.end();
+             ++it)
+         {
+             vector<int> aResult = *it;
+             aResult.push_back(input[i]);
+             tmp.push_back(aResult);
+         }
+         for (int i = 0; i < tmp.size(); ++i)
+         {
+             result.insert(tmp[i]);
+         }
+    }
+}
+int main() {
+    unordered_set<vector<int> > result;
+    vector<int> input;
+    for (int i = 0 ; i < 4; ++i)
+    {
+        input.push_back(i);
+    }
+    powerSet(input, result);
+    for (unordered_set<vector<int> >::iterator it = result.begin();
+             it != result.end();
+             ++it)
+    {
+        for (int i = 0; < i < it->size(); ++i)
+        {
+            cout << (*it)[i] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}

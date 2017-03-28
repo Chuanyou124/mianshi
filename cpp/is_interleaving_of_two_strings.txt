@@ -1,0 +1,103 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+bool isIL(const string& s1, const string& s2, const string& s, vector<vector<vector<char> > >& state, int i, int j, int k)
+{
+   if (s1=="" && s2=="" && s=="")
+    {
+        return true;
+    }
+   if (i >= s1.length())
+   {
+      if( j >= s2.length() ? false:(k >= s.length()? false:s2.substr(j) == s.substr(k)))
+      {
+         state[i][j][k] = 'T';
+         return true;
+      }
+      else
+      {
+         state[i][j][k] = 'F';
+         return false;
+      }
+   }
+   if (j >= s2.length())
+   {
+      if (i >= s1.length() ? false:(k >= s.length()? false:s1.substr(i) == s.substr(k)))
+      {
+         state[i][j][k] = 'T';
+         return true;
+      }
+      else
+      {
+         state[i][j][k] = 'F';
+         return false;
+      }
+   }
+   if (s1.length()-i + s2.length()-j != s.length()-k)
+   {
+      return false;
+   }
+   bool first = false;
+   bool second = false;
+   if (s[k] == s1[i])
+   {
+      if (state[i+1][j][k+1] == 'U')
+      {
+         first = isIL(s1, s2, s, state, i+1, j, k+1);
+         state[i+1][j][k+1] = first?'T':'F';
+      }
+      else
+      {
+         first = state[i+1][j][k+1] == 'T' ? true:false;
+      }
+   }
+   if (s[k] == s2[j])
+   {
+      if (state[i][j+1][k+1] == 'U')
+      {
+         second = isIL(s1, s2, s, state, i, j+1, k+1);
+         state[i][j+1][k+1] = second?'T':'F';
+      }
+      else
+      {
+         second = state[i][j+1][k+1] == 'T' ? true:false;
+      }
+   }
+   if (first || second)
+   {
+      state[i][j][k] = 'T';
+   }
+   else
+   {
+      state[i][j][k] = 'F';
+   }
+   return first || second;
+}
+
+int main()
+{
+   cout<<"type s1, s2 and s\n";
+   string s1, s2, s;
+   cin >> s1;
+   cin >> s2;
+   cin >> s;
+   vector<vector<vector<char> > > state;
+   for (int i = 0; i < s1.length()+1; ++i)
+   {
+      vector<vector<char> > st2;
+      for (int j = 0; j < s2.length()+1; ++j)
+      {
+         vector<char> st1;
+         for (int k = 0; k < s.length()+1; ++k)
+         {
+            st1.push_back('U');
+         }
+         st2.push_back(st1);
+      }
+      state.push_back(st2);
+   }
+   cout << isIL(s1, s2, s, state, 0, 0, 0)<<endl;
+   return 0;
+}

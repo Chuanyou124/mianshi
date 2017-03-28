@@ -1,0 +1,73 @@
+Write a function that, given a list of integers (both positive and negative) returns the sum of the contiguous subsequence with maximum sum. 
+example:
+[1, -3, 1, 2] => 3
+[4, -3, 1, 3] => 5
+[-1, -1] => 0 
+
+int sum(const vector<int>& list)
+{
+    int max = 0;
+    int sum = 0;
+    for (int i = 0; i < list.size();)
+    {
+        while (i < list.size() && sum >= 0)
+        {
+            sum += list[i++];
+            max = sum > max ? sum : max;
+        }
+        sum = 0;
+    }
+    return max;
+}
+1. list is empty, it should return 0.
+2. list is all negative, it should return 0.
+3. list is [5, 2, -1, -7, 2, -1, 8], should return 9
+4. list is [1, -2, 3, -4, 5, -6], should return 5
+ 
+
+
+
+
+
+=================
+Isomorphic words
+Given two (dictionary) words as Strings, determine if they are isomorphic. Two words are called isomorphic if the letters in one word can be remapped to get the second word. Remapping a letter means replacing all occurrences of it with another letter while the ordering of the letters remains unchanged. No two letters may map to the same letter, but a letter may map to itself.
+Example:
+    ?   given "foo", "cpp"; returns true - we can map 'f' -> 'c' and 'o' -> 'p'
+    ?   given "bar", "foo"; returns false - we can't map 'o' to both 'a' and 'r'
+    ?   given "turtle", "tletur"; returns true - we can map 't' -> 't', 'u' -> 'l', 'r' -> 'e'
+
+
+bool isoMorphic(const string& a, const string& b)
+{
+    if (a == b)
+    {
+        return true;
+    }
+    if (a.length() != b.length())
+    {
+        return false;
+    }
+    hash_map<char, char> aMap;
+    hash_map<char, char> bMap;
+    for (int i = 0; i < a.length(); ++i)
+    {
+        if (aMap.find(a[i]) == aMap.end())
+        {
+            if (bMap.find(b[i]) == bMap.end())
+            {
+                aMap[a[i]] = b[i];
+                bMap[b[i]] = a[i];
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (aMap[a[i]] != b[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}

@@ -1,0 +1,44 @@
+class Solution {
+public:
+    void getNextLevel(vector<string>& vs, map<string, int>& found, const string& w, const string& end, const unordered_set<string>& dict)
+    {
+        string wc = w;
+        for (int i = 0; i < w.length(); ++i)
+        {
+            for (int j = 0; j < 26; ++j)
+            {
+                wc[i] = 'a' + j;
+                if ((dict.find(wc) != dict.end() || wc == end) && found.find(wc) == found.end())
+                {
+                    vs.push_back(wc);
+                    found[wc] = found[w] + 1; //level increased by 1
+                }
+                wc = w;
+            }
+        }
+    }
+    int ladderLength(string start, string end, unordered_set<string> &dict) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        queue<string> bfs;
+        bfs.push(start);
+        map<string, int> found;
+        found[start] = 1;
+        
+        while (!bfs.empty())
+        {
+            vector<string> nextLevel;
+            if (bfs.front() == end)
+            {
+                return found[bfs.front()];
+            }
+            getNextLevel(nextLevel, found, bfs.front(), end, dict);
+            for (int i = 0; i < nextLevel.size(); ++i)
+            {
+                bfs.push(nextLevel[i]);
+            }
+            bfs.pop();
+        }
+        return 0;
+    }
+};

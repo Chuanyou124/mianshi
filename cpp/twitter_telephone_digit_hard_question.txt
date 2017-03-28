@@ -1,0 +1,77 @@
+[1, 8, 0, 0, ...]
+
+{
+    1 => A, B, C
+    2 => D, E, F
+    ...
+}
+
+{
+    1 => A, B, C
+    2 => D, E, F
+    12 => G, H, I
+    121 => J, K, L
+    ...
+}
+
+[1, 2] => all combinations of [A, D], [A, E], ..., [G], [H], [I]
+
+[1, 2, 3,5]
+1 2 3 4
+12 3 4
+1 23 4
+1 2 34
+12 34
+123 4
+1 234
+1234
+
+1234 56789
+1234 5
+1234 56
+1234 567 ..
+
+123 4
+123 45
+123 456
+123 4567
+...
+
+1 -> 2 -> [3, 34, 345, ...], 23 -> [4, 45, 456, ..], 234, 2345, ..
+12 -> 3, 34, 345, ..
+123 -> 4, 45, 456, 4567, ...
+1234
+..
+123456789
+
+
+
+getComb(result, num, end + X) X: [1...end]
+
+void getComb(vector<vector<char> >& result, const vector<int>& num, const map<int, vector<char> >&dict, int end)
+{
+    if (end == 0)
+    {
+        result.push_back(dict[num[0]]);
+    }
+    if (end >= num.size())
+    {
+        return;
+    }
+    getComb(result, num, end - 1);
+    int size = result.size();
+    vector<vector<char> > previousResult = result;
+    for (int i = 0; i < size; ++i)
+    {    
+        result[i].push_back(dict[num[end]][0]);
+    }
+    for (int i = 1; i < dict[num[end]].size(); ++i)
+    {
+        for (int j = 0; j < size; ++j)
+        {
+            vector<char> aResult = previousResult[i];
+            aResult.push_back(dict[num[end]][i]);
+            result.push_back(aResult);
+        }
+    }
+}

@@ -1,0 +1,74 @@
+Fuzzy string matching
+
+filename: string_expre s sion_matcher.cc
+pattern: strxp - matches
+pattern: strpx - doesn't match
+pattern: sstrxp -doesn't match
+
+def match(patternStr, filenameStr):
+  return boolean
+  
+  bool match(const string& p, const string& f)
+  {
+      int pL = p.length();
+      int fL = f.length();
+      if (pL == 0)
+      {
+          return true;
+      }
+      if (fL == 0)
+      {
+          return false;
+      }
+      
+      int pos = 0;
+      int count = 0;
+      for (int i = 0; i < pL; ++i)
+      {
+          for (int j = pos; j < fL; ++j)
+          {
+              if (f[j] == p[i])
+              {
+                  pos = j + 1;
+                  count++;
+                  break;
+              }
+          }
+      }
+      if (count == pL)
+      {
+          return true;
+      }
+      return false;
+  }
+  
+  /**
+   * Select n random, unique items from a list.  items array is unique.
+   */
+   
+   Array<String> pick(Array<String> items, int n)
+   
+   
+   vector<string> pick(vector<string> items, int n)
+   {
+       int iL = items.length();
+       vector<string> result;
+       if (n > iL)
+       {
+           return result;
+       }
+       int last = iL - 1;
+       for (int i = 0; i < n; ++i)
+       {
+           int pos = rand(n - i) - 1; // assume rand(k) will generate a random num in [1, k]
+           result.push_back(items[pos]);
+           swap(items, pos, last); // it will swap the 2 elements at position pos and last within items.
+           last--;
+       }
+       return result;
+   }
+   
+   
+   
+   
+   

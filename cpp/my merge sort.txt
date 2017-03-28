@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+
+void mergeSort(int a[], int begin, int end)
+{
+    if (begin >= end)
+    {
+        return;
+    }
+    int leftBegin = begin;
+    int leftEnd = (begin+end)/2;
+    int rightBegin = leftEnd + 1;
+    int rightEnd = end;
+    mergeSort(a, leftBegin, leftEnd);
+    mergeSort(a, rightBegin, rightEnd);
+    
+    int store[end - begin + 1];
+    for (int i = 0; i <= end - begin; ++i)
+    {
+        if (rightBegin > rightEnd)
+        {
+            store[i] = a[leftBegin++];
+        }
+        else if (leftBegin > leftEnd)
+        {
+            store[i] = a[rightBegin++];
+        }
+        else if (a[leftBegin] > a[rightBegin])
+        {
+            store[i] = a[rightBegin++];
+        }
+        else
+        {
+            store[i] = a[leftBegin++];
+        }
+    }
+    int length = end - begin;
+    for (int i = 0; i <= length; ++i)
+    {
+        a[begin++] = store[i];
+    }
+}
+
+int main() {
+    
+    int x[12] = {9, 5, 11, 23, 2, 4, 5, 7, 1, -2, 10, 8};
+    mergeSort(x, 0, 11);
+    for (int i = 0; i < 12; ++i)
+    cout<<x[i]<<endl;
+    
+    return 0;
+}

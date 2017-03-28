@@ -1,0 +1,47 @@
+// Type your C++ code and click the "Run Code" button!
+// Your code output will be shown on the left.
+// Click on the "Show input" button to enter input data to be read (from stdin).
+
+#include <iostream>
+using namespace std;
+void fillSpiral(vector<vector<int>>& matrix, int beginValue, int beginR, int beginC, int n)
+    {cout<<"here\n";
+        if (n < 1)
+        {cout<<"there";
+            return;
+        }
+        for (int i = beginC; i < beginC+n; ++i)
+        {
+            matrix[beginR][i] = beginValue++;
+        }
+        for (int j = beginR+1; j < beginR+n; ++j)
+        {
+            matrix[j][beginC+n-1] = beginValue++;
+        }
+        for (int i = beginC+n-2; i>= beginC; --i)
+        {
+            matrix[beginR+n-1][i] = beginValue++;
+        }
+        for (int j = beginR+n-2; j > beginR; --j)
+        {
+            matrix[j][beginC] = beginValue++;
+        }
+        fillSpiral(matrix, beginValue, beginR+1, beginC+1, n-2);
+    }
+    vector<vector<int> > generateMatrix(int n) {
+        vector<vector<int>> matrix;
+        for (int i = 0; i < n; ++i)
+        {
+            vector<int> aRow;
+            aRow.reserve(n);
+            matrix.push_back(aRow);
+        }
+        fillSpiral(matrix, 1, 0, 0, n);
+        return matrix;
+    }
+int main() {
+    
+    vector<vector<int>> r = generateMatrix(1);
+    
+    return 0;
+}

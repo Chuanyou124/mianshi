@@ -1,0 +1,62 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    vector<string> allStrings(TreeNode *top)
+    {
+        vector<string> sv;
+        if (!top)
+        {
+            return sv;
+        }
+        vector<string> svl = allStrings(top->left);
+        vector<string> svr = allStrings(top->right);
+        
+        string topS = to_string(top->val);
+        for (int i = 0; i < svl.size(); ++i)
+        {
+            string newS = svl[i] + topS;
+            sv.push_back(newS);
+        }
+        for (int i = 0; i < svr.size(); ++i)
+        {
+            string newS = svr[i] + topS;
+            sv.push_back(newS);
+        }
+        if (svl.size() == 0 && svr.size() == 0)
+        {
+            sv.push_back(topS);
+        }
+        return sv;
+    }
+    int sumNumbers(TreeNode *root) {
+        
+        vector<string> all_strings = allStrings(root);
+        if (all_strings.size() == 0)
+        {
+            return 0;
+        }
+        int sum = 0;
+        for (int j = 0; j < all_strings.size(); ++j)
+        {
+            int aNum = 0;
+            while (all_strings[j].length() != 0)
+            {
+                aNum = aNum*10 + (int)(all_strings[j].back() - '0');
+                all_strings[j].pop_back();
+            }
+            sum += aNum;
+        }
+        
+        return sum;
+        
+    }
+};

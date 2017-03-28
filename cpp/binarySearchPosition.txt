@@ -1,0 +1,41 @@
+// Type your C++ code and click the "Run Code" button!
+// Your code output will be shown on the left.
+// Click on the "Show input" button to enter input data to be read (from stdin).
+
+#include <iostream>
+using namespace std;
+
+int find_index(const vector<float>& v, float n) {
+    if(v.size() < 1) {
+        return 0;
+    }
+    int left = 0;
+    int right = v.size() - 1;
+    while (left <= right) {
+        int middle = (left + right) / 2;
+        //cout << middle << " " << v[middle] << " " << left << " " << right << endl;
+        if(v[middle] == n) {
+            return middle;
+        }
+        if (v[middle] > n) {
+            right = middle - 1;
+        } else {
+            left = middle + 1;
+        }
+    }
+    return left;
+}
+
+int main() {
+
+    double a[30];
+    for (int i = 0; i < 30; ++i)
+    {
+        a[i] = i;
+        cout<<a[i]<<" ";
+    }
+
+    cout << endl << find_index(a, 30, 9.1) << endl;
+
+    return 0;
+}

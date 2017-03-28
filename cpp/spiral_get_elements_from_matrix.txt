@@ -1,0 +1,44 @@
+class Solution {
+public:
+
+    void getPeri(vector<vector<int>>& matrix, vector<int>& peri, int r, int c, int rn, int cn)
+    {
+        if (rn <= 0 || cn <= 0)
+        {
+            return;
+        }
+        for (int i = c; i < c+cn; ++i)
+        {
+            peri.push_back(matrix[r][i]);
+        }
+        for (int j = r + 1; j < r+rn; ++j)
+        {
+            peri.push_back(matrix[j][c+cn-1]);
+        }
+        if (rn > 1)
+        {
+            for (int i = c + cn - 2; i >= c; --i)
+            {
+                peri.push_back(matrix[r+rn-1][i]);
+            }
+        }
+        if (cn > 1)
+        {
+            for (int j = r + rn - 2; j > r; --j)
+            {
+                peri.push_back(matrix[j][c]);
+            }
+        }
+        getPeri(matrix, peri, r+1, c+1, rn-2, cn-2);
+    }
+    vector<int> spiralOrder(vector<vector<int> > &matrix) {
+        
+        vector<int> result;
+        if (matrix.size() == 0)
+        {
+            return result;
+        }
+        getPeri(matrix, result, 0, 0, matrix.size(), matrix[0].size());
+        return result;
+    }
+};

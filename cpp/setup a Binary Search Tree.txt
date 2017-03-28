@@ -1,0 +1,66 @@
+// Type your C++ code and click the "Run Code" button!
+// Your code output will be shown on the left.
+// Click on the "Show input" button to enter input data to be read (from stdin).
+
+#include <iostream>
+using namespace std;
+int ct = 0;
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+    Node(int x):data(x),left(NULL),right(NULL){}
+    Node():data(ct++),left(NULL),right(NULL)
+    {
+    }
+};
+
+void printTree(Node *top)
+{
+    if (top == NULL)
+    {
+        return;
+    }
+    printTree(top->left);
+    cout<<top->data<<" ";
+    printTree(top->right);
+}
+
+void setBST(Node *top, int& begin)
+{
+    if (!top)
+    {
+        return;
+    }
+    setBST(top->left, begin);
+    top->data = ++begin;
+    setBST(top->right, begin);
+}
+int main() {
+    Node nA[30];
+    Node *pA[30];
+    for (int i = 0; i < 30; ++i)
+    {
+        pA[i] = &nA[i];
+        if (2*i + 1 <= 29)
+        {   
+            pA[i]->left = &nA[2*i + 1];
+            cout<<i+1<<" l:"<<2*i+2<<endl;
+        }
+        else
+            cout<<i+1<<" l:NULL"<<endl;
+        if (2*i + 2 <= 29)
+        {
+            pA[i]->right = &nA[2*i + 2];
+            cout<<i+1<<" r:"<<2*i+3<<endl;
+        }
+        else
+            cout<<i+1<<" r:NULL"<<endl;
+    }
+    int beginV = 0;
+    setBST(pA[0], beginV);
+    printTree(pA[0]);
+    
+    return 0;
+}

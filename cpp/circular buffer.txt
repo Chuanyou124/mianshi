@@ -1,0 +1,84 @@
+// Type your C++ code and click the "Run Code" button!
+// Your code output will be shown on the left.
+// Click on the "Show input" button to enter input data to be read (from stdin).
+
+#include <iostream>
+using namespace std;
+
+class CircBuf
+{
+    struct popObj
+    {
+        int data;
+        bool isEmpty;
+    };
+    int data[20];
+    int head;
+    int tail;
+    bool isEmpty;
+    public:
+        CircBuf():head(0), tail(-1), isEmpty(true){} 
+        bool empty()
+        {
+            return isEmpty;
+        }
+        void push(int i)
+        {
+            if ((tail + 1)%20 == head)
+            {
+                data[head] = i;
+                tail = head;
+                if (!isEmpty)
+                {
+                    head = (head + 1) % 20;
+                }
+                else
+                {
+                    isEmpty = false;
+                }
+            }
+            else
+            {
+                tail = (tail + 1) % 20;
+                data[tail] = i;
+            }
+        }
+        popObj pop()
+        {
+            popObj pO;
+            if (isEmpty)
+            {
+                pO.isEmpty = true;
+            }
+            else
+            {
+                pO.isEmpty = false;
+                pO.data = data[tail];
+                if (tail == head)
+                {
+                    isEmpty = true;
+                    tail = head - 1;
+                }
+                else
+                {
+                    tail = tail == 0 ? 19:tail - 1;
+                }
+            }
+            return pO;
+        }
+};
+
+int main() {
+    
+    CircBuf cb;
+    for (int i = 0; i < 13; ++i)
+    {
+        cb.push(20 -i);
+    }
+    while (!cb.empty())
+    {
+        cout << cb.pop().data << " ";
+    }
+    cout << cb.pop().isEmpty<<endl;
+    return 0;
+}

@@ -1,0 +1,30 @@
+   vector<double> mA(const vector<double>& a, int k)
+   {
+        assert(k>0);
+        vector<double> result;
+        int size = a.size();
+        result.reserve(size);
+        double tmpSum = 0;
+        int bound = k > size ? size : k;
+        for (int i = 0; i < bound; ++i)
+        {
+            tmpSum += a[i];
+            result.push_back(tmpSum/(i+1));
+        }
+        if (k >= size)
+        {
+            return result;
+        }
+        for (int i = k; i < size; ++i)
+        {
+            result.push_back(result[i-1] + (a[i]-a[i-k])/k);
+        }
+        return result;
+   }
+   
+   Test cases:
+   a. k = -3, 0;
+   b. k = 3, a.size() = 2;
+   c. k = 3, a.size() = 3;
+   d. k = 3, a.size() = 5;
+   e. a.size() = 0 (empty array)

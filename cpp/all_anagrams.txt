@@ -1,0 +1,50 @@
+class Solution {
+public:
+    string getSig(const string& str)
+    {
+        string result;
+        int stats[26] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+
+        for (int i = 0; i < str.length(); ++i)
+        {
+            int index = (int) (str[i] - 'a');
+            stats[index] += 1;
+        }
+        for (int i = 0; i < 26; ++i)
+        {
+            stringstream ss;
+            ss << stats[i];
+            result += (ss.str() + "_");
+        }
+        return result;
+    }
+    vector<string> anagrams(vector<string> &strs) {
+        vector<string> result;
+        map<string, vector<string> > anas;
+        for (int i = 0; i < strs.size(); ++i)
+        {
+            string sig = getSig(strs[i]);
+            vector<string> strings;
+            strings.push_back(strs[i]);
+            if (anas.find(sig) == anas.end())
+            {
+                anas[sig] = strings;
+            }
+            else
+            {
+                anas[sig].push_back(strs[i]);
+            }
+        }
+        for (map<string, vector<string> >::iterator it = anas.begin(); it != anas.end(); ++it)
+        {
+            if (it->second.size() > 1)
+            {
+                for (int i = 0; i < it->second.size(); ++i)
+                {
+                    result.push_back(it->second[i]);
+                }
+            }
+        }
+        return result;
+    }
+};

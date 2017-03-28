@@ -1,0 +1,111 @@
+class Solution {
+public:
+
+    void getNextLevel(vector<string>& aLevel, const string& word, const string& end, map<string, pair<vector<string>, int> >& paths, unordered_set<string>& dict)
+    {
+        if (paths.find(end) != paths.end() && paths[word].second >= paths[end].second)
+        {
+            return;
+        }
+        string wd = word;
+        for (int i = 0; i < word.length(); ++i)
+        {
+            for (int j = 0; j < 26; ++j)
+            {
+                wd[i] = 'a' + j;
+                if (wd != end && dict.find(wd) != dict.end())
+                {
+                    if (paths.find(wd) == paths.end())
+                    {
+                        aLevel.push_back(wd);
+                        paths[wd] = pair<vector<string>, int>(vector<string>(1, word), paths[word].second+1); //record its parent
+                    }
+                    else if (paths[word].second < paths[wd].second)
+                    {
+                        paths[wd].first.push_back(word);
+                    }
+                }
+                else if (wd == end)
+                {
+                    aLevel.push_back(wd);
+                    if (paths.find(wd) == paths.end())
+                    {
+                        paths[wd] = pair<vector<string>, int>(vector<string>(1, word), paths[word].second+1);
+                    }
+                    else
+                    {
+                        paths[wd].first.push_back(word);
+                    }
+                }
+                wd = word;
+            }
+        }
+    }
+    
+    vector<vector<string> > fillResults(map<string, pair<vector<string>, int> >& paths, string end, string word)
+    {
+        vector<string> reversed;
+        vector<vector<string> > reversedResults;
+        if (paths[word].first[0] == "")
+        {
+            reversed.push_back(word);
+            reversedResults.push_back(reversed);
+            return reversedResults;
+        }
+        for (int i = 0; i < paths[word].first.size(); ++i)
+        {
+            vector<vector<string> > aReversedResults = fillResults(paths, end, paths[word].first[i]);
+            for (int j = 0; j < aReversedResults.size(); ++j)
+            {
+                vector<string> reversed;
+                reversed.push_back(word);
+                for (int k = 0; k < aReversedResults[j].size(); ++k)
+                {
+                    reversed.push_back(aReversedResults[j][k]);
+                }
+                reversedResults.push_back(reversed);
+            }
+        }
+        return reversedResults;
+    }
+    
+    void reverseOrder(const vector<vector<string> >& reversedResults, vector<vector<string> >& results)
+    {
+        for (int i = 0; i < reversedResults.size(); ++i)
+        {
+            vector<string> aR;
+            for (int j = reversedResults[i].size() -1; j >= 0; --j)
+            {
+                aR.push_back(reversedResults[i][j]);
+            }
+            results.push_back(aR);
+        }
+    }
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        queue<string> words;
+        words.push(start);
+        map<string, pair<vector<string>, int> > paths;
+        paths[start] = pair<vector<string>, int>(vector<string>(1, ""), 1);
+        
+        vector<vector<string> > results;
+        while (words.empty() == false)
+        {
+            if (words.front() == end)
+            {
+                vector<vector<string> > reversedResults = fillResults(paths, end, end);
+                reverseOrder(reversedResults, results);
+                return results;
+            }
+            vector<string> nextLevel;
+            getNextLevel(nextLevel, words.front(), end, paths, dict);
+            for (int i = 0; i < nextLevel.size(); ++i)
+            {
+                words.push(nextLevel[i]);
+            }
+            words.pop();
+        }
+        return results;
+    }
+};

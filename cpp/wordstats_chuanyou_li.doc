@@ -1,0 +1,78 @@
+#!/usr/bin/python2.7 -tt
+
+'''READ ME
+This is a Python program, and when executing, please change the suffix into .py, and put 
+your article file in the same directory, then run with command "./wordstats_chuanyou_li.py [your file name]".
+Results will be printed in console following exactly the sample format.
+'''
+
+import sys
+import os.path
+import re
+import string
+
+def printStats(statsList):
+	count = 0
+	for key in sorted(statsList):
+		print '{0:5} {1:20} {2:20}'.format(string.ascii_lowercase[count%26]*(count/26 + 1)+'.', key, '{'+statsList[key][0].__str__()+':'+','.join(statsList[key][1])+'}')
+		count += 1
+
+
+def fillStatsList(sentences, statsList):
+	sIndex = 0
+	for sentence in sentences:
+		sIndex += 1
+		words = sentence.split()
+		for word in words:
+			word = word.strip('[,;:"()<>{}[]]+')
+			if statsList.has_key(word):
+				statsList[word][0] += 1
+				statsList[word][1].append(sIndex.__str__())
+			else:
+				statsList[word] = [1, [sIndex.__str__()]]
+
+''' notes for function below
+	# step 4: Previously, it is designed to find all pair of double quotes, and eliminate the case that '.' in
+	# double quotes are mistaken to be a boundary between sentences, but after seeing a lot of news, many quoted
+	# sentences are deemed as an independent sentence, so this step is disregarded.
+	#dqPos = [doubleQuote.start() for doubleQuote in re.finditer('"', fileStr)]
+	#if dqPos % 2 != 0:
+	#	return {'error':True, 'errorMsg':"double quotes are not paired in file", 'fileStr':""}
+	#index = 0
+	#newFileStr = fileStr[0:dqPos[0]]
+	#	step 5: It is desired to decompose 'I'm', 'doesn't' into 'I am' and 'does not', but some case such as
+	#	'He's', it is hard to figure out whether it is 'He has' or 'He is/was'... so this step is also abandoned
+	#  step 6: The 'word' definition in question is not clear that such as whether 'QE3' is a word or not, so 
+	#  numbers are deemed as words in this program
+'''
+def makeSentences(fileStr):
+	# step 1: change to lower case for all alphabetical characters and plus a space in the end
+	fileStr = fileStr.lower()+' '
+	# step 2: add coma to special phrases e.g. and i.e. so as to prevent their '.' to be mistaken as sentence boundary
+	fileStr = fileStr.replace('e.g.', 'e.g.,').replace('i.e.', 'i.e.,').replace('co. ltd.', 'co., ltd.,').replace('u.s.', 'u.s.,').replace('l.p.', 'l.p.,')
+	print fileStr
+	# step 3: split file into sentences by '!', '?' or continuous '?!!.' PLUS a space 
+	return re.split('[\!\?\.]+[\s\n]+', fileStr)
+
+
+def wordStats(fileName, statsList):
+	if os.path.isfile(fileName) == False:
+		print 'Error: '+fileName+' is not a file in current dir'
+		sys.exit()
+	file = open(fileName, 'rU')
+	fileStr = file.read()
+	file.close()
+	sentences = makeSentences(fileStr)
+	fillStatsList(sentences, statsList)
+	printStats(statsList)
+
+
+def main():
+	if (len(sys.argv) != 2):
+		print 'Error: expected exactly 1 input file'
+		return False
+	statsList = {}
+	wordStats(sys.argv[1], statsList)
+
+if __name__ == '__main__':
+	main()
